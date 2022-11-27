@@ -1,18 +1,24 @@
 #!/bin/bash -ex
 
-sudo su
+# 1. Actualizamos nuestras dependencias
+yum update -y
+yum upgrade -y
 
-# 1. Descargamos nvm (gestor de versiones de nodejs)
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-
-# 2. Agregamos variable de entorno de NVM
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# 2. Instalamos git
+yum install git -y
 
 # 3. Instalamos la version 14 de nodeJS 
-nvm install 14
+curl -sL https://rpm.nodesource.com/setup_14.x | bash -
+yum install -y nodejs git
 
-# 4. Creamos el archivo de configuracion
+# 4. Obtenemos nuestro codigo fuente del repositorio de github
+cd /home/ec2-user/
+git clone https://github.com/rvigil24/blog-app-server
+
+# 5. Nos movemos al directorio del proyecto
+cd blog-app-server
+
+# 2. Creamos el archivo de configuracion
 echo "PORT = 5000
 NODE_ENV = \"production\"
 
@@ -44,16 +50,16 @@ AWS_S3_REGION = \"us-east-1\"
 # 2FA
 MFA_AUTHENTICATION_APP_NAME = \"nombre-de-app\"" > .env
 
-# 5. Asignamos los permisos respectivos
+# 3. Asignamos los permisos respectivos
 sudo chmod -R 755 .
 
-# 6. Instalamos las dependencias de nuestro proyecto
+# 4. Instalamos las dependencias de nuestro proyecto
 npm install
 
-# 7. Instalamos las dependencias restantes
+# 5. Instalamos las dependencias restantes
 npm install -g pm2
 
-# 8. Ejecutamos pm2 para que el servicio se ejecute aunque el sistema se reinicie
+# 6. Ejecutamos pm2 para que el servicio se ejecute aunque el sistema se reinicie
 pm2 start app/server.js
 
 sudo env PATH=$PATH:/home/ec2-user/.nvm/versions/node/v14.21.1/bin /home/ec2-user/.nvm/versions/node/v14.21.1/lib/node_modules/pm2/bin/pm2 startup systemd -u ec2-user --hp /home/ec2-user
