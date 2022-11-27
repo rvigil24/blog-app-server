@@ -1,10 +1,8 @@
 #!/bin/bash -ex
-# 1. Imprimimos los logs de datos en un archivo separado (para debugging)
-exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-
-# 2. Descargamos nvm (gestor de versiones de nodejs)
+# 1. Descargamos nvm (gestor de versiones de nodejs)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-# 3. Lo ejecutamos
+
+# 2. Lo ejecutamos
 . /.nvm/nvm.sh
 
 # 3. Instalamos la version 14 de nodeJS 
