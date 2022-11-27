@@ -66,5 +66,14 @@ sudo chmod -R 755 .
 # 10. Instalamos las dependencias de nuestro proyecto
 npm install
 
-# 11. inicializamos nuestra aplicacion
-npm start > app.out.log 2> app.err.log < /dev/null &
+# 11. Instalamos las dependencias restantes
+npm install -g pm2
+
+# 12. Ejecutamos pm2 para que el servicio se ejecute aunque el sistema se reinicie
+pm2 start app/server.js
+
+sudo env PATH=$PATH:/home/ec2-user/.nvm/versions/node/v14.21.1/bin /home/ec2-user/.nvm/versions/node/v14.21.1/lib/node_modules/pm2/bin/pm2 startup systemd -u ec2-user --hp /home/ec2-user
+
+pm2 save
+
+pm2 startup
