@@ -7,28 +7,10 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# 3. Lo ejecutamos
-#sudo . ~/.nvm/nvm.sh
-
-# 4. Instalamos la version 14 de nodeJS 
+# 3. Instalamos la version 14 de nodeJS 
 nvm install 14
 
-# 5. Upgrade yum
-sudo yum upgrade -y
-
-# 6. Instalamos git
-sudo yum install git -y
-
-# 7. Nos movemos a nuestro directorio de usuario
-cd /home/ec2-user
-
-# 8. Obtenemos nuestro codigo fuente del repositorio de github
-git clone https://github.com/rvigil24/blog-app-server
-
-# 9. Nos movemos al directorio del proyecto
-cd blog-app-server
-
-# 10. Creamos el archivo de configuracion
+# 4. Creamos el archivo de configuracion
 echo "PORT = 5000
 NODE_ENV = \"production\"
 
@@ -60,16 +42,16 @@ AWS_S3_REGION = \"us-east-1\"
 # 2FA
 MFA_AUTHENTICATION_APP_NAME = \"nombre-de-app\"" > .env
 
-# 9. Asignamos los permisos respectivos
+# 5. Asignamos los permisos respectivos
 sudo chmod -R 755 .
 
-# 10. Instalamos las dependencias de nuestro proyecto
+# 6. Instalamos las dependencias de nuestro proyecto
 npm install
 
-# 11. Instalamos las dependencias restantes
+# 7. Instalamos las dependencias restantes
 npm install -g pm2
 
-# 12. Ejecutamos pm2 para que el servicio se ejecute aunque el sistema se reinicie
+# 8. Ejecutamos pm2 para que el servicio se ejecute aunque el sistema se reinicie
 pm2 start app/server.js
 
 sudo env PATH=$PATH:/home/ec2-user/.nvm/versions/node/v14.21.1/bin /home/ec2-user/.nvm/versions/node/v14.21.1/lib/node_modules/pm2/bin/pm2 startup systemd -u ec2-user --hp /home/ec2-user
