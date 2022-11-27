@@ -14,7 +14,7 @@ export NVM_DIR="/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" 
 
 # 5. Upgrade yum
-sudo yum upgrade
+sudo yum upgrade -y
 
 # 6. Instalamos git
 sudo yum install git -y
