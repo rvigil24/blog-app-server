@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+sudo su
+
 # 1. Descargamos nvm (gestor de versiones de nodejs)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 
